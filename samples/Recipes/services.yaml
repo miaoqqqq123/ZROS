@@ -1,0 +1,55 @@
+# ZROS Service Manager - YAML Configuration Example
+# This file can be loaded with ServiceRegistry.LoadFromFile("services.yaml")
+
+- name: logger_service
+  display_name: Logger Service
+  description: Central logging service
+  executable: ZROS.Services/LoggerService/LoggerService.exe
+  arguments: []
+  depends_on: []
+  auto_start: true
+  start_type: Automatic
+  restart_policy:
+    auto_restart: true
+    max_retries: 5
+    initial_delay_ms: 1000
+    backoff_multiplier: 2.0
+    max_delay_ms: 30000
+    restart_window_seconds: 60
+
+- name: param_server
+  display_name: Parameter Server
+  description: Global parameter store
+  executable: ZROS.Services/ParamServer/ParamServer.exe
+  arguments:
+    - "--port"
+    - "8080"
+  depends_on:
+    - logger_service
+  auto_start: true
+  start_type: Automatic
+  restart_policy:
+    auto_restart: true
+    max_retries: 3
+    initial_delay_ms: 1000
+    backoff_multiplier: 2.0
+    max_delay_ms: 15000
+    restart_window_seconds: 60
+
+- name: sensor_node
+  display_name: Sensor Node
+  executable: ZROS.Examples/SensorNode/SensorNode.exe
+  arguments:
+    - "--rate"
+    - "50"
+  depends_on:
+    - logger_service
+    - param_server
+  auto_start: true
+  restart_policy:
+    auto_restart: true
+    max_retries: 5
+    initial_delay_ms: 2000
+    backoff_multiplier: 2.0
+    max_delay_ms: 30000
+    restart_window_seconds: 120

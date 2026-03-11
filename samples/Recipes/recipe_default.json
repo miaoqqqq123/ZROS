@@ -1,0 +1,83 @@
+{
+  "id": "recipe_default",
+  "name": "ZROS Default Robot System",
+  "description": "Standard robot system configuration with logger, parameter server, and sensor node",
+  "version": "1.0.0",
+  "created": "2026-03-11T10:30:00Z",
+  "last_modified": "2026-03-11T12:00:00Z",
+  "services": [
+    {
+      "id": "svc_logger",
+      "name": "logger_service",
+      "display_name": "Logger Service",
+      "description": "Central logging service for all nodes",
+      "executable": "ZROS.Services/LoggerService/LoggerService.exe",
+      "arguments": [],
+      "depends_on": [],
+      "auto_start": true,
+      "start_type": "Automatic",
+      "restart_policy": {
+        "auto_restart": true,
+        "max_retries": 5,
+        "initial_delay_ms": 1000,
+        "backoff_multiplier": 2.0,
+        "max_delay_ms": 30000,
+        "restart_window_seconds": 60
+      },
+      "health_check": {
+        "enabled": false,
+        "interval_seconds": 30,
+        "failure_threshold": 3,
+        "timeout_seconds": 5
+      }
+    },
+    {
+      "id": "svc_param_server",
+      "name": "param_server",
+      "display_name": "Parameter Server",
+      "description": "Stores and serves global system parameters",
+      "executable": "ZROS.Services/ParamServer/ParamServer.exe",
+      "arguments": ["--port", "8080"],
+      "depends_on": ["logger_service"],
+      "auto_start": true,
+      "start_type": "Automatic",
+      "restart_policy": {
+        "auto_restart": true,
+        "max_retries": 3,
+        "initial_delay_ms": 1000,
+        "backoff_multiplier": 2.0,
+        "max_delay_ms": 15000,
+        "restart_window_seconds": 60
+      },
+      "health_check": {
+        "enabled": true,
+        "interval_seconds": 30,
+        "failure_threshold": 3,
+        "timeout_seconds": 5,
+        "http_endpoint": "http://localhost:8080/health"
+      }
+    },
+    {
+      "id": "svc_sensor_node",
+      "name": "sensor_node",
+      "display_name": "Sensor Node",
+      "description": "Reads sensor data and publishes to the system bus",
+      "executable": "ZROS.Examples/SensorNode/SensorNode.exe",
+      "arguments": ["--rate", "50"],
+      "depends_on": ["logger_service", "param_server"],
+      "auto_start": true,
+      "start_type": "Automatic",
+      "restart_policy": {
+        "auto_restart": true,
+        "max_retries": 5,
+        "initial_delay_ms": 2000,
+        "backoff_multiplier": 2.0,
+        "max_delay_ms": 30000,
+        "restart_window_seconds": 120
+      },
+      "health_check": {
+        "enabled": false
+      }
+    }
+  ]
+}

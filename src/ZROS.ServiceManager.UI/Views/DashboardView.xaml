@@ -1,0 +1,81 @@
+<UserControl x:Class="ZROS.ServiceManager.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Background="{StaticResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="12">
+            <TextBlock Text="Dashboard" Style="{StaticResource SectionHeaderStyle}" FontSize="20" Margin="0,0,0,16"/>
+
+            <!-- Statistics Cards Row -->
+            <WrapPanel>
+                <!-- Total Services Card -->
+                <Border Style="{StaticResource CardStyle}" Width="180" Height="100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding SystemStatus.TotalServices}"
+                                   FontSize="40" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Total Services" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Running Card -->
+                <Border Style="{StaticResource CardStyle}" Width="180" Height="100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding SystemStatus.RunningServices}"
+                                   FontSize="40" FontWeight="Bold" Foreground="{StaticResource RunningBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Running" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stopped Card -->
+                <Border Style="{StaticResource CardStyle}" Width="180" Height="100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding SystemStatus.StoppedServices}"
+                                   FontSize="40" FontWeight="Bold" Foreground="{StaticResource StoppedBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Stopped" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Faulted Card -->
+                <Border Style="{StaticResource CardStyle}" Width="180" Height="100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding SystemStatus.FaultedServices}"
+                                   FontSize="40" FontWeight="Bold" Foreground="{StaticResource FaultedBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Faulted" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Memory Card -->
+                <Border Style="{StaticResource CardStyle}" Width="220" Height="100">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding SystemStatus.TotalMemoryText}"
+                                   FontSize="28" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Total Memory" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+
+            <!-- Status Summary -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,12,0,0">
+                <StackPanel>
+                    <TextBlock Text="System Status" Style="{StaticResource SectionHeaderStyle}"/>
+                    <TextBlock Text="{Binding SystemStatus.StatusSummary}"
+                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="14"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
