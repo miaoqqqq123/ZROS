@@ -1,0 +1,92 @@
+<Window x:Class="ZROS.ServiceManager.UI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ZROS.ServiceManager.UI.ViewModels"
+        mc:Ignorable="d"
+        Title="ZROS Service Manager"
+        Height="768" Width="1280"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Menu Bar -->
+            <RowDefinition Height="Auto"/>  <!-- Toolbar -->
+            <RowDefinition Height="*"/>     <!-- Main Content -->
+            <RowDefinition Height="Auto"/>  <!-- Status Bar -->
+        </Grid.RowDefinitions>
+
+        <!-- ── Menu Bar ── -->
+        <Menu Grid.Row="0" Background="{StaticResource PrimaryBrush}" Foreground="White">
+            <MenuItem Header="_File" Foreground="White">
+                <MenuItem Header="Open Configuration..." Command="{Binding OpenConfigCommand}"/>
+                <MenuItem Header="Save Configuration..." Command="{Binding SaveConfigCommand}"/>
+                <Separator/>
+                <MenuItem Header="Exit" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_View" Foreground="White">
+                <MenuItem Header="Dashboard"         Command="{Binding ShowDashboardCommand}"/>
+                <MenuItem Header="Service List"      Command="{Binding ShowServiceListCommand}"/>
+                <MenuItem Header="Recipe Management" Command="{Binding ShowRecipeManagementCommand}"/>
+                <Separator/>
+                <MenuItem Header="Toggle Theme" Command="{Binding ToggleThemeCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- ── Toolbar ── -->
+        <Border Grid.Row="1" Background="{StaticResource PrimaryBrush}" Padding="8,4">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                <Button Content="▶ Start All" Command="{Binding StartAllCommand}"
+                        Style="{StaticResource SuccessButtonStyle}" Margin="2"/>
+                <Button Content="■ Stop All" Command="{Binding StopAllCommand}"
+                        Style="{StaticResource DangerButtonStyle}" Margin="2"/>
+                <Button Content="↻ Refresh" Command="{Binding RefreshCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="2"/>
+                <Separator Margin="8,2"/>
+                <Button Content="📋 Dashboard" Command="{Binding ShowDashboardCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="2"/>
+                <Button Content="🔧 Services" Command="{Binding ShowServiceListCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="2"/>
+                <Button Content="📁 Recipes" Command="{Binding ShowRecipeManagementCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="2"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Main Content Area ── -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>  <!-- Navigation -->
+                <ColumnDefinition Width="*"/>    <!-- Content -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation Panel -->
+            <Border Grid.Column="0" Background="{StaticResource PrimaryBrush}">
+                <StackPanel Margin="8">
+                    <TextBlock Text="ZROS" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,12,0,16" HorizontalAlignment="Center"/>
+                    <Button Content="🏠 Dashboard"     Command="{Binding ShowDashboardCommand}"
+                            Foreground="White" Background="Transparent" BorderThickness="0"
+                            HorizontalContentAlignment="Left" Padding="8,6" Margin="0,2" Cursor="Hand"/>
+                    <Button Content="⚙ Services"       Command="{Binding ShowServiceListCommand}"
+                            Foreground="White" Background="Transparent" BorderThickness="0"
+                            HorizontalContentAlignment="Left" Padding="8,6" Margin="0,2" Cursor="Hand"/>
+                    <Button Content="📁 Recipes"       Command="{Binding ShowRecipeManagementCommand}"
+                            Foreground="White" Background="Transparent" BorderThickness="0"
+                            HorizontalContentAlignment="Left" Padding="8,6" Margin="0,2" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Dynamic Content -->
+            <ContentControl Grid.Column="1" Content="{Binding CurrentView}" Margin="8"/>
+        </Grid>
+
+        <!-- ── Status Bar ── -->
+        <Border Grid.Row="3" Background="{StaticResource PrimaryBrush}" Padding="8,4">
+            <TextBlock Text="{Binding StatusBarText}" Foreground="White" FontSize="12"/>
+        </Border>
+    </Grid>
+</Window>
