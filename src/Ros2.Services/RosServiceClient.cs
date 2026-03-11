@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ros2.Core;
 using Ros2.Messaging;
+using Zenoh.Native.Logging;
 
 namespace Ros2.Services
 {
@@ -12,16 +14,18 @@ namespace Ros2.Services
     {
         private readonly RosNode _node;
         private readonly IMessageSerializer _serializer;
+        private readonly ILogger<RosServiceClient<TRequest, TResponse>> _logger;
         private bool _disposed;
 
         public string ServiceName { get; }
 
-        public RosServiceClient(RosNode node, string serviceName, IMessageSerializer? serializer = null)
+        public RosServiceClient(RosNode node, string serviceName, IMessageSerializer? serializer = null, ILogger<RosServiceClient<TRequest, TResponse>>? logger = null)
         {
             _node = node ?? throw new ArgumentNullException(nameof(node));
             ServiceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
             _serializer = serializer ?? new JsonMessageSerializer();
-            Console.WriteLine($"[RosServiceClient] Created client for service '{ServiceName}' on node '{_node.Name}'");
+            _logger = logger ?? ZrosLoggerFactory.CreateLogger<RosServiceClient<TRequest, TResponse>>();
+            _logger.Info("Created client for service '{ServiceName}' on node '{NodeName}'", ServiceName, _node.Name);
         }
 
         public async Task<TResponse> CallAsync(TRequest request, TimeSpan? timeout = null, CancellationToken cancellationToken = default)
@@ -33,7 +37,7 @@ namespace Ros2.Services
 
             if (_node.Context.IsSimulated)
             {
-                Console.WriteLine($"[RosServiceClient] [SIM] Calling service '{ServiceName}' (will timeout after {effectiveTimeout.TotalSeconds}s)");
+                _logger.Warn("[SIM] Calling service '{ServiceName}' (will timeout after {Timeout}s)", ServiceName, effectiveTimeout.TotalSeconds);
                 await Task.Delay(effectiveTimeout, cancellationToken);
                 throw new NotSupportedException("Service call not supported in simulation mode");
             }
@@ -47,7 +51,7 @@ namespace Ros2.Services
             if (!_disposed)
             {
                 _disposed = true;
-                Console.WriteLine($"[RosServiceClient] Disposed client for service '{ServiceName}'");
+                _logger.Debug("Disposed client for service '{ServiceName}'", ServiceName);
             }
         }
     }

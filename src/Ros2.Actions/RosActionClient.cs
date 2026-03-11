@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ros2.Core;
 using Ros2.Messaging;
+using Zenoh.Native.Logging;
 
 namespace Ros2.Actions
 {
@@ -12,10 +14,12 @@ namespace Ros2.Actions
         public Guid GoalId { get; } = Guid.NewGuid();
 
         private readonly bool _isSimulated;
+        private readonly ILogger<ActionGoalHandle<TFeedback, TResult>> _logger;
 
-        internal ActionGoalHandle(bool isSimulated)
+        internal ActionGoalHandle(bool isSimulated, ILogger<ActionGoalHandle<TFeedback, TResult>> logger)
         {
             _isSimulated = isSimulated;
+            _logger = logger;
             Status = ActionGoalStatus.Accepted;
         }
 
@@ -23,7 +27,7 @@ namespace Ros2.Actions
         {
             if (_isSimulated)
             {
-                Console.WriteLine($"[ActionGoalHandle] [SIM] Waiting for result of goal {GoalId}");
+                _logger.Debug("[SIM] Waiting for result of goal {GoalId}", GoalId);
                 await Task.Yield();
                 Status = ActionGoalStatus.Succeeded;
                 return default;
@@ -35,7 +39,7 @@ namespace Ros2.Actions
         {
             if (_isSimulated)
             {
-                Console.WriteLine($"[ActionGoalHandle] [SIM] Canceling goal {GoalId}");
+                _logger.Debug("[SIM] Canceling goal {GoalId}", GoalId);
                 await Task.Yield();
                 Status = ActionGoalStatus.Canceled;
                 return true;
@@ -51,16 +55,18 @@ namespace Ros2.Actions
     {
         private readonly RosNode _node;
         private readonly IMessageSerializer _serializer;
+        private readonly ILogger<RosActionClient<TGoal, TFeedback, TResult>> _logger;
         private bool _disposed;
 
         public string ActionName { get; }
 
-        public RosActionClient(RosNode node, string actionName, IMessageSerializer? serializer = null)
+        public RosActionClient(RosNode node, string actionName, IMessageSerializer? serializer = null, ILogger<RosActionClient<TGoal, TFeedback, TResult>>? logger = null)
         {
             _node = node ?? throw new ArgumentNullException(nameof(node));
             ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
             _serializer = serializer ?? new JsonMessageSerializer();
-            Console.WriteLine($"[RosActionClient] Created action client for '{ActionName}' on node '{_node.Name}'");
+            _logger = logger ?? ZrosLoggerFactory.CreateLogger<RosActionClient<TGoal, TFeedback, TResult>>();
+            _logger.Info("Created action client for '{ActionName}' on node '{NodeName}'", ActionName, _node.Name);
         }
 
         public async Task<ActionGoalHandle<TFeedback, TResult>> SendGoalAsync(TGoal goal)
@@ -70,9 +76,10 @@ namespace Ros2.Actions
 
             if (_node.Context.IsSimulated)
             {
-                Console.WriteLine($"[RosActionClient] [SIM] Sending goal to action '{ActionName}'");
+                _logger.Debug("[SIM] Sending goal to action '{ActionName}'", ActionName);
                 await Task.Yield();
-                return new ActionGoalHandle<TFeedback, TResult>(isSimulated: true)
+                var handleLogger = ZrosLoggerFactory.CreateLogger<ActionGoalHandle<TFeedback, TResult>>();
+                return new ActionGoalHandle<TFeedback, TResult>(isSimulated: true, handleLogger)
                 {
                     Status = ActionGoalStatus.Accepted
                 };
@@ -86,7 +93,7 @@ namespace Ros2.Actions
             if (!_disposed)
             {
                 _disposed = true;
-                Console.WriteLine($"[RosActionClient] Disposed action client for '{ActionName}'");
+                _logger.Debug("Disposed action client for '{ActionName}'", ActionName);
             }
         }
     }
