@@ -1,6 +1,8 @@
 using System;
+using Microsoft.Extensions.Logging;
 using Ros2.Core;
 using Ros2.Messaging;
+using Zenoh.Native.Logging;
 
 namespace Ros2.Pub
 {
@@ -9,20 +11,22 @@ namespace Ros2.Pub
         private readonly RosNode _node;
         private readonly Action<T> _callback;
         private readonly IMessageSerializer _serializer;
+        private readonly ILogger<RosSubscriber<T>> _logger;
         private bool _disposed;
 
         public string Topic { get; }
         public string NodeName => _node.Name;
         public int ReceivedCount { get; private set; }
 
-        public RosSubscriber(RosNode node, string topic, Action<T> callback, IMessageSerializer? serializer = null)
+        public RosSubscriber(RosNode node, string topic, Action<T> callback, IMessageSerializer? serializer = null, ILogger<RosSubscriber<T>>? logger = null)
         {
             _node = node ?? throw new ArgumentNullException(nameof(node));
             Topic = topic ?? throw new ArgumentNullException(nameof(topic));
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
             _serializer = serializer ?? new JsonMessageSerializer();
+            _logger = logger ?? ZrosLoggerFactory.CreateLogger<RosSubscriber<T>>();
             _node.RegisterSubscriber(topic);
-            Console.WriteLine($"[RosSubscriber] Created subscriber on topic '{Topic}' for node '{NodeName}'");
+            _logger.Info("Created subscriber on topic '{Topic}' for node '{NodeName}'", Topic, NodeName);
         }
 
         /// <summary>
@@ -36,7 +40,7 @@ namespace Ros2.Pub
 
             T message = _serializer.Deserialize<T>(data);
             ReceivedCount++;
-            Console.WriteLine($"[RosSubscriber] [SIM] Received message #{ReceivedCount} on topic '{Topic}'");
+            _logger.Debug("[SIM] Received message #{Count} on topic '{Topic}'", ReceivedCount, Topic);
             _callback(message);
         }
 
@@ -45,7 +49,7 @@ namespace Ros2.Pub
             if (!_disposed)
             {
                 _disposed = true;
-                Console.WriteLine($"[RosSubscriber] Disposed subscriber on topic '{Topic}'");
+                _logger.Debug("Disposed subscriber on topic '{Topic}'", Topic);
             }
         }
     }

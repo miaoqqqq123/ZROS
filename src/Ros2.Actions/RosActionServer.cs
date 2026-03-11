@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Ros2.Core;
 using Ros2.Messaging;
+using Zenoh.Native.Logging;
 
 namespace Ros2.Actions
 {
@@ -16,6 +18,7 @@ namespace Ros2.Actions
         private readonly Func<TGoal, CancellationToken, Task<TResult>> _executeCallback;
         private readonly Action<TFeedback>? _feedbackPublisher;
         private readonly IMessageSerializer _serializer;
+        private readonly ILogger<RosActionServer<TGoal, TFeedback, TResult>> _logger;
         private bool _disposed;
 
         public string ActionName { get; }
@@ -27,7 +30,8 @@ namespace Ros2.Actions
             Func<TGoal, bool> goalCallback,
             Func<TGoal, CancellationToken, Task<TResult>> executeCallback,
             Action<TFeedback>? feedbackPublisher = null,
-            IMessageSerializer? serializer = null)
+            IMessageSerializer? serializer = null,
+            ILogger<RosActionServer<TGoal, TFeedback, TResult>>? logger = null)
         {
             _node = node ?? throw new ArgumentNullException(nameof(node));
             ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
@@ -35,16 +39,17 @@ namespace Ros2.Actions
             _executeCallback = executeCallback ?? throw new ArgumentNullException(nameof(executeCallback));
             _feedbackPublisher = feedbackPublisher;
             _serializer = serializer ?? new JsonMessageSerializer();
+            _logger = logger ?? ZrosLoggerFactory.CreateLogger<RosActionServer<TGoal, TFeedback, TResult>>();
 
             IsRunning = true;
 
             if (_node.Context.IsSimulated)
             {
-                Console.WriteLine($"[RosActionServer] [SIM] Action server '{ActionName}' is running (simulation mode)");
+                _logger.Info("[SIM] Action server '{ActionName}' is running (simulation mode)", ActionName);
             }
             else
             {
-                Console.WriteLine($"[RosActionServer] Action server '{ActionName}' started on node '{_node.Name}'");
+                _logger.Info("Action server '{ActionName}' started on node '{NodeName}'", ActionName, _node.Name);
             }
         }
 
@@ -54,7 +59,7 @@ namespace Ros2.Actions
             {
                 _disposed = true;
                 IsRunning = false;
-                Console.WriteLine($"[RosActionServer] Disposed action server for '{ActionName}'");
+                _logger.Debug("Disposed action server for '{ActionName}'", ActionName);
             }
         }
     }

@@ -1,6 +1,8 @@
 using System;
+using Microsoft.Extensions.Logging;
 using Ros2.Core;
 using Ros2.Messaging;
+using Zenoh.Native.Logging;
 
 namespace Ros2.Pub
 {
@@ -8,19 +10,21 @@ namespace Ros2.Pub
     {
         private readonly RosNode _node;
         private readonly IMessageSerializer _serializer;
+        private readonly ILogger<RosPublisher<T>> _logger;
         private bool _disposed;
 
         public string Topic { get; }
         public string NodeName => _node.Name;
         public int PublishedCount { get; private set; }
 
-        public RosPublisher(RosNode node, string topic, IMessageSerializer? serializer = null)
+        public RosPublisher(RosNode node, string topic, IMessageSerializer? serializer = null, ILogger<RosPublisher<T>>? logger = null)
         {
             _node = node ?? throw new ArgumentNullException(nameof(node));
             Topic = topic ?? throw new ArgumentNullException(nameof(topic));
             _serializer = serializer ?? new JsonMessageSerializer();
+            _logger = logger ?? ZrosLoggerFactory.CreateLogger<RosPublisher<T>>();
             _node.RegisterPublisher(topic);
-            Console.WriteLine($"[RosPublisher] Created publisher on topic '{Topic}' for node '{NodeName}'");
+            _logger.Info("Created publisher on topic '{Topic}' for node '{NodeName}'", Topic, NodeName);
         }
 
         public void Publish(T message)
@@ -33,11 +37,13 @@ namespace Ros2.Pub
 
             if (_node.Context.IsSimulated)
             {
-                Console.WriteLine($"[RosPublisher] [SIM] Published message #{PublishedCount} on topic '{Topic}': {System.Text.Encoding.UTF8.GetString(payload)}");
+                _logger.Debug("[SIM] Published message #{Count} on topic '{Topic}': {Payload}",
+                    PublishedCount, Topic, System.Text.Encoding.UTF8.GetString(payload));
             }
             else
             {
-                Console.WriteLine($"[RosPublisher] Published message #{PublishedCount} on topic '{Topic}' ({payload.Length} bytes)");
+                _logger.Debug("Published message #{Count} on topic '{Topic}' ({Bytes} bytes)",
+                    PublishedCount, Topic, payload.Length);
             }
         }
 
@@ -46,7 +52,7 @@ namespace Ros2.Pub
             if (!_disposed)
             {
                 _disposed = true;
-                Console.WriteLine($"[RosPublisher] Disposed publisher on topic '{Topic}'");
+                _logger.Debug("Disposed publisher on topic '{Topic}'", Topic);
             }
         }
     }
