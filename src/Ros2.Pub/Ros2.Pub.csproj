@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Ros2.Pub</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ros2.Core\Ros2.Core.csproj" />
+    <ProjectReference Include="..\Ros2.Messaging\Ros2.Messaging.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ros2.Actions/Ros2.Actions.csproj" />
+    <Project Path="src/Ros2.Core/Ros2.Core.csproj" />
+    <Project Path="src/Ros2.Messaging/Ros2.Messaging.csproj" />
+    <Project Path="src/Ros2.Pub/Ros2.Pub.csproj" />
+    <Project Path="src/Ros2.Services/Ros2.Services.csproj" />
+    <Project Path="src/Zenoh.Native/Zenoh.Native.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ZROS.Tests/ZROS.Tests.csproj" />
+  </Folder>
+</Solution>
