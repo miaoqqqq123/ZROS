@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>ZROS.Core</RootNamespace>
+    <AssemblyName>ZROS.Core</AssemblyName>
+    <PackageId>ZROS.Core</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>ZROS Contributors</Authors>
+    <Description>ZROS Core: single-package combining Zenoh P/Invoke, Pub/Sub, Services, Actions, serialization, and logging (NLog default).</Description>
+    <PackageTags>ros2;zenoh;robotics;pubsub</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.4" />
+    <PackageReference Include="NLog" Version="6.1.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.1.2" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Logging\nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- native runtimes for NuGet packaging (place zenoh-c binaries here) -->
+    <None Include="native\win-x64\native\zenohc.dll" Condition="Exists('native\win-x64\native\zenohc.dll')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\win-x64\native\zenohc.dll</PackagePath>
+    </None>
+    <None Include="native\win-arm64\native\zenohc.dll" Condition="Exists('native\win-arm64\native\zenohc.dll')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\win-arm64\native\zenohc.dll</PackagePath>
+    </None>
+    <None Include="native\linux-x64\native\libzenohc.so" Condition="Exists('native\linux-x64\native\libzenohc.so')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\linux-x64\native\libzenohc.so</PackagePath>
+    </None>
+    <None Include="native\linux-arm64\native\libzenohc.so" Condition="Exists('native\linux-arm64\native\libzenohc.so')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\linux-arm64\native\libzenohc.so</PackagePath>
+    </None>
+    <None Include="native\osx-x64\native\libzenohc.dylib" Condition="Exists('native\osx-x64\native\libzenohc.dylib')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\osx-x64\native\libzenohc.dylib</PackagePath>
+    </None>
+    <None Include="native\osx-arm64\native\libzenohc.dylib" Condition="Exists('native\osx-arm64\native\libzenohc.dylib')">
+      <Pack>true</Pack>
+      <PackagePath>runtimes\osx-arm64\native\libzenohc.dylib</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

@@ -16,10 +16,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Ros2.Messaging\Ros2.Messaging.csproj" />
-    <ProjectReference Include="..\..\src\Ros2.Core\Ros2.Core.csproj" />
-    <ProjectReference Include="..\..\src\Ros2.Pub\Ros2.Pub.csproj" />
-    <ProjectReference Include="..\..\src\Ros2.Services\Ros2.Services.csproj" />
-    <ProjectReference Include="..\..\src\Ros2.Actions\Ros2.Actions.csproj" />
+    <ProjectReference Include="..\..\src\ZROS.Core\ZROS.Core.csproj" />
+    <ProjectReference Include="..\..\src\ZROS.Messages\ZROS.Messages.csproj" />
   </ItemGroup>
 </Project>

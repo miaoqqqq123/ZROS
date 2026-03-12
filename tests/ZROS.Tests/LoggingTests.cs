@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Ros2.Core;
-using Ros2.Pub;
-using Ros2.Messaging;
-using Ros2.Messaging.Messages.std_msgs;
-using Ros2.Services;
-using Zenoh.Native.Logging;
+using ZROS.Core;
+using ZROS.Core.Logging;
+using ZROS.Messages.std_msgs;
 using Xunit;
 
 namespace ZROS.Tests

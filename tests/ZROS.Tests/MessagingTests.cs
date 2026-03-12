@@ -1,7 +1,7 @@
 using System;
-using Ros2.Messaging;
-using Ros2.Messaging.Messages.std_msgs;
-using Ros2.Messaging.Messages.geometry_msgs;
+using ZROS.Core;
+using ZROS.Messages.std_msgs;
+using ZROS.Messages.geometry_msgs;
 using Xunit;
 
 namespace ZROS.Tests
