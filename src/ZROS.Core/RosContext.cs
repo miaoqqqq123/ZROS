@@ -23,7 +23,10 @@ namespace ZROS.Core
             _logger.Info("Initializing Zenoh session...");
             try
             {
-                int result = ZenohNative.z_open(out _session, IntPtr.Zero);
+                // zenoh-c v1.x: config must be created explicitly before z_open.
+                // z_open(session*, moved_config*, open_options*) – 3 arguments.
+                ZenohNative.z_config_default(out var config);
+                int result = ZenohNative.z_open(out _session, ref config, IntPtr.Zero);
                 if (result == ZenohErrorCodes.Z_OK)
                 {
                     _sessionOpen = true;
@@ -32,8 +35,11 @@ namespace ZROS.Core
                 }
                 else
                 {
+                    // z_open failed: config ownership was NOT transferred, drop it.
+                    ZenohNative.z_config_drop(ref config);
                     IsSimulated = true;
-                    _logger.Warn("Zenoh session failed to open (code={ErrorCode}), running in simulation mode.", result);
+                    _logger.Warn("Zenoh session failed to open (code={ErrorCode}: {Msg}), running in simulation mode.",
+                        result, ZenohErrorCodes.GetErrorString(result));
                 }
             }
             catch (DllNotFoundException ex)
@@ -74,7 +80,8 @@ namespace ZROS.Core
                 {
                     try
                     {
-                        ZenohNative.z_close(ref _session);
+                        // zenoh-c v1.x: z_session_drop is what z_drop(z_move(session)) calls.
+                        ZenohNative.z_session_drop(ref _session);
                         _logger.Info("Zenoh session closed.");
                     }
                     catch (Exception ex)
