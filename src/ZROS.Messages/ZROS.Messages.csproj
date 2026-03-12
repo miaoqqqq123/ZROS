@@ -10,6 +10,7 @@
     <Description>ZROS standard message types (std_msgs, geometry_msgs, etc.) as plain DTO/POCO classes.</Description>
     <PackageTags>ros2;zenoh;robotics;messages</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ZROS.Core\ZROS.Core.csproj" />

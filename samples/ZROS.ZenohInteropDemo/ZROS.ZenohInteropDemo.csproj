@@ -7,6 +7,7 @@
     <RootNamespace>ZROS.ZenohInteropDemo</RootNamespace>
     <AssemblyName>ZROS.ZenohInteropDemo</AssemblyName>
     <Description>Smoke-test / demo that validates zenoh-c v1.x P/Invoke bindings.</Description>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\ZROS.Core\ZROS.Core.csproj" />

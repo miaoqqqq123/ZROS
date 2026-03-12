@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{5D20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZROS.ZenohInteropDemo", "samples\ZROS.ZenohInteropDemo\ZROS.ZenohInteropDemo.csproj", "{AD1D1A19-3C0D-41BB-9C12-C911C3FE1DE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZrosSmoke", "ZrosSmoke\ZrosSmoke.csproj", "{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,18 @@ Global
 		{AD1D1A19-3C0D-41BB-9C12-C911C3FE1DE1}.Release|x64.Build.0 = Release|Any CPU
 		{AD1D1A19-3C0D-41BB-9C12-C911C3FE1DE1}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD1D1A19-3C0D-41BB-9C12-C911C3FE1DE1}.Release|x86.Build.0 = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|x64.Build.0 = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Debug|x86.Build.0 = Debug|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|x64.ActiveCfg = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|x64.Build.0 = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|x86.ActiveCfg = Release|Any CPU
+		{CBC0F526-5B6D-4A25-9BD4-F297419C6F55}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

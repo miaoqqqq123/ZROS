@@ -11,6 +11,7 @@
     <Description>ZROS Core: single-package combining Zenoh P/Invoke, Pub/Sub, Services, Actions, serialization, and logging (NLog default).</Description>
     <PackageTags>ros2;zenoh;robotics;pubsub</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.4" />
