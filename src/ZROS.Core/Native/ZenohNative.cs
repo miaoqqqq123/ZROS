@@ -835,53 +835,29 @@ namespace ZROS.Core.Native
         // ────────────────────────────────────────────────────────────
 
         /// <summary>
-        /// 探测原生库是否可加载（检测 DLL 存在且入口点有效）。
+        /// 探针方法：尝试调用一个轻量级 zenoh-c 函数以检测原生库是否可加载。
         /// <para>
-        /// 此方法尝试执行 z_config_default → z_open → z_session_drop 完整流程。
-        /// 成功返回 <c>true</c>（表示原生库存在且基本功能正常）；
-        /// 遇到 DllNotFoundException、EntryPointNotFoundException 或其他异常时返回 <c>false</c>。
+        /// 实现原理：调用 z_config_default()（无网络副作用），紧接 z_config_drop() 释放资源，
+        /// 捕获 DllNotFoundException / EntryPointNotFoundException / BadImageFormatException。
         /// </para>
         /// <para>
         /// 典型用法：判断是否在真实模式（有 zenoh-c DLL）下运行，
         /// 若返回 false 则退回模拟模式（参见 RosContext.IsSimulated）。
         /// </para>
         /// </summary>
-        /// <returns>true = 原生库可用（真实 Zenoh 模式）；false = 不可用（模拟模式）。</returns>
+        /// <returns>true = 原生库成功加载；false = 找不到 DLL 或入口点。</returns>
         public static bool TryLoad()
         {
             try
             {
-                // 步骤 1：创建默认配置
-                z_config_default(out var config);
-                // 步骤 2：打开会话（消耗 config）
-                int result = z_open(out var session, ref config, IntPtr.Zero);
-                if (result == ZenohErrorCodes.Z_OK)
-                {
-                    // 步骤 3：成功时关闭会话
-                    z_session_drop(ref session);
-                }
-                else
-                {
-                    // 步骤 3（失败路径）：z_open 失败时 config 未被消耗，手动释放
-                    z_config_drop(ref config);
-                }
+                // 仅调用轻量级函数（无网络操作、无内存泄漏风险）验证 DLL 是否可加载
+                z_config_default(out var cfg);
+                z_config_drop(ref cfg);
                 return true;
             }
-            catch (DllNotFoundException)
-            {
-                // DLL 文件不存在
-                return false;
-            }
-            catch (EntryPointNotFoundException)
-            {
-                // DLL 存在但入口点不匹配（版本不兼容）
-                return false;
-            }
-            catch
-            {
-                // 其他异常（如 BadImageFormatException：DLL 位数不匹配等）
-                return false;
-            }
+            catch (DllNotFoundException)   { return false; }
+            catch (EntryPointNotFoundException) { return false; }
+            catch (BadImageFormatException) { return false; }
         }
     }
 }
