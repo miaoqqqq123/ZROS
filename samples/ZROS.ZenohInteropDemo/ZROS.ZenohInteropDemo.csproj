@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>ZROS.ZenohInteropDemo</RootNamespace>
+    <AssemblyName>ZROS.ZenohInteropDemo</AssemblyName>
+    <Description>Smoke-test / demo that validates zenoh-c v1.x P/Invoke bindings.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ZROS.Core\ZROS.Core.csproj" />
+    <ProjectReference Include="..\..\src\ZROS.Messages\ZROS.Messages.csproj" />
+  </ItemGroup>
+</Project>
