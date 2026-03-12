@@ -8,6 +8,7 @@ ZROS is a .NET 8 framework that provides ROS2-style communication primitives (Pu
 |---------|-------------|
 | **ZROS.Core** | Core runtime: Zenoh P/Invoke, Pub/Sub, Services, Actions, serialization, and logging |
 | **ZROS.Messages** | Standard message types (std_msgs, geometry_msgs, etc.) |
+| **ZROS.NativeBindingDemo** | 验证 zenoh-c 1.7.2 P/Invoke 原生绑定层的控制台测试程序 |
 
 ## Quick Start
 
@@ -71,4 +72,10 @@ dotnet restore
 dotnet build ZROS.sln -c Debug
 dotnet test
 dotnet sln ZROS.sln list
+```
+
+运行 P/Invoke 原生绑定验证 Demo（无需 zenoh-c DLL 即可运行）：
+
+```bash
+dotnet run --project samples/ZROS.NativeBindingDemo
 ```
