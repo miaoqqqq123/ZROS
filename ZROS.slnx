@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/ZROS.Core/ZROS.Core.csproj" />
+    <Project Path="src/ZROS.Messages/ZROS.Messages.csproj" />
     <Project Path="src/Ros2.Actions/Ros2.Actions.csproj" />
     <Project Path="src/Ros2.Core/Ros2.Core.csproj" />
     <Project Path="src/Ros2.Messaging/Ros2.Messaging.csproj" />

@@ -1,8 +1,6 @@
 using System;
-using Ros2.Core;
-using Ros2.Pub;
-using Ros2.Messaging.Messages.std_msgs;
-using Ros2.Messaging;
+using ZROS.Core;
+using ZROS.Messages.std_msgs;
 using Xunit;
 
 namespace ZROS.Tests

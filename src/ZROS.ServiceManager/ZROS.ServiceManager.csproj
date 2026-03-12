@@ -13,6 +13,6 @@
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Zenoh.Native\Zenoh.Native.csproj" />
+    <ProjectReference Include="..\ZROS.Core\ZROS.Core.csproj" />
   </ItemGroup>
 </Project>

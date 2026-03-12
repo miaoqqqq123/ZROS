@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using ZROS.ServiceManager.Models;
-using Zenoh.Native.Logging;
+using ZROS.Core.Logging;
 
 namespace ZROS.ServiceManager
 {
